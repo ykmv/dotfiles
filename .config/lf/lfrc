@@ -1,0 +1,2 @@
+set shell mksh
+map D delete

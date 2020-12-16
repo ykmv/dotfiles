@@ -1,0 +1,63 @@
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+call plug#begin('~/.vim/plugged')
+    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+    Plug 'junegunn/goyo.vim',
+    Plug 'rust-lang/rust.vim',
+    Plug 'dense-analysis/ale',
+    Plug 'rstacruz/vim-closer',
+    Plug 'terryma/vim-expand-region'
+call plug#end()
+
+set tabstop=3       
+set shiftwidth=3  
+set expandtab     
+set smarttab      
+
+set keymap=russian-jcukenwin
+set iminsert=0
+set imsearch=0
+highlight lCursor guifg=NONE guibg=Cyan
+source ~/.config/vim/ruscmd.vim
+
+set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯЖ;ABCDEFGHIJKLMNOPQRSTUVWXYZ:,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
+
+nmap <Space>i :!compile %<CR>
+nmap <Space>ш :!compile %<CR>
+
+nnoremap H 0
+nnoremap L A
+nmap K <Plug>(expand_region_expand)
+nmap J <Plug>(expand_region_shrink)
+nnoremap <silent> <esc> <esc>:noh<cr>
+
+autocmd FileType tex set timeoutlen=200
+autocmd FileType tex imap <Space><Space> <Esc>/<++><CR>df>i
+autocmd FileType tex nmap <Space><Space> <Esc>/<++><CR>df>i
+
+autocmd FileType tex inoremap ;ol   \begin{itemize}<Enter><Enter>\end{itemize}<Esc>k
+autocmd FileType tex inoremap ;ul   \begin{enumerate}<Enter><Enter>\end{enumerate}<Esc>k
+autocmd FileType tex inoremap ;li   \item <Esc>T{i
+autocmd FileType tex inoremap ;sc   \section{}<Esc>T{i
+autocmd FileType tex inoremap ;ssc  \subsection{}<Esc>T{i
+autocmd FileType tex inoremap ;sssc \subsubsection{}<Esc>T{i
+autocmd FileType tex inoremap ;lab  \label{}<Esc>T{i
+autocmd FileType tex inoremap ;ref  \ref{}<Esc>T{i
+autocmd FileType tex inoremap ;tb   \textbf{}<Esc>T{i
+autocmd FileType tex inoremap ;ti   \textit{}<Esc>T{i
+autocmd FileType tex inoremap ;mt   \maketitle<Esc>T{i
+autocmd FileType tex inoremap ;tab  \begin{tabular}<Enter><Enter>\end{tabular}<Up>
+
+autocmd FileType tex inoremap ;bmd  $$<Enter><Enter>$$<Esc>k
+autocmd FileType tex inoremap ;bmi  $  $<Esc>T{i
+autocmd FileType tex inoremap ;hs   \hspace{}<Esc>T{i
+autocmd FileType tex inoremap ;mf   \frac{}{}<Esc>T{i
+autocmd FileType tex inoremap ;mv   \vec{}<Esc>T{i
+autocmd FileType tex inoremap ;msq  \sqrt{}<Esc>T{i
+
+let g:ale_lint_on_text_changed = 'never'
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
