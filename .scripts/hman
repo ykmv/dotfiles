@@ -1,3 +1,2 @@
 #!/bin/sh
-
 apropos . | dmenu -l 30 | awk '{print $1}' | LANG="en_US.UTF-8" xargs -r  man -Tpdf |  zathura -
