@@ -1,5 +1,6 @@
 #!/bin/sh
 ln -s ~/dotfiles/.Xresources ~/.Xresources
+ln -s ~/dotfiles/.xinitrc ~/.xinitrc
 ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
 ln -s ~/dotfiles/.scripts ~/.scripts
 ln -s ~/dotfiles/.mkshrc ~/.mkshrc
