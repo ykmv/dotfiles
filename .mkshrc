@@ -47,9 +47,9 @@ alias jj="java -jar"
 
 nld() {cp $DOCS/latex/template.tex ./$1.tex}
 
-alias xi="sudo xbps-install"
-alias xq="sudo xbps-query"
-alias xr="sudo xbps-remove"
+alias xi="doas xbps-install"
+alias xq="doas xbps-query"
+alias xr="doas xbps-remove"
 
 export LANG=en_US.UTF-8
 
