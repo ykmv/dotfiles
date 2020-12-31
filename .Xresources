@@ -1,5 +1,5 @@
 *.alpha: 1
-*.font: Terminus (TTF):size=12:antialias=true
+*.font: monospace:size=10:antialias=true
 *.background: #111111
 *.foreground: #FFFFFF
 *.foreground_bold: #FFFFFF

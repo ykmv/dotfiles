@@ -1,8 +1,3 @@
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
 call plug#begin('~/.vim/plugged')
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     Plug 'junegunn/goyo.vim',
@@ -10,11 +5,15 @@ call plug#begin('~/.vim/plugged')
     Plug 'dense-analysis/ale',
     Plug 'rstacruz/vim-closer',
     Plug 'terryma/vim-expand-region',
-    Plug 'vimwiki/vimwiki'
+    Plug 'vimwiki/vimwiki',
+    Plug 'Shougo/deoplete.nvim',
+    Plug 'vim-scripts/AutoComplPop'
 call plug#end()
 
-set tabstop=3       
-set shiftwidth=3  
+syntax enable
+set nocompatible
+set tabstop=3
+set shiftwidth=3
 set expandtab     
 set smarttab      
 
@@ -29,6 +28,8 @@ set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯЖ;ABCDEFGHIJKLM
 nmap <Space>i :!compile %<CR>
 nmap <Space>ш :!compile %<CR>
 
+nnoremap j gj
+nnoremap k gk
 nnoremap H 0
 nnoremap L A
 nmap K <Plug>(expand_region_expand)
@@ -60,5 +61,21 @@ autocmd FileType tex inoremap ;mv   \vec{}<Esc>T{i
 autocmd FileType tex inoremap ;msq  \sqrt{}<Esc>T{i
 
 let g:ale_lint_on_text_changed = 'never'
+let g:ale_completion_enabled = 1
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+call deoplete#custom#option('sources', {
+         \ '_': ['ale'],
+         \})
+filetype plugin on
+set omnifunc=ale#completion#OmniFunc
+let g:ale_completion_autoimport = 1
+set complete+=kspell
+set completeopt=menuone,longest
+set shortmess+=c
+inoremap <expr> <Tab> pumvisible() ? "<C-y>" :"<Tab>"
+
+inoremap <F6> set spelllang=ru \ 
+   set spell!
+inoremap <F7> set spelllang=en_us \ 
+   set spell!

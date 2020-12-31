@@ -7,6 +7,6 @@ case $INPUTFILE in
     *.html)   $BROWSER "$INPUTFILE" ;;
     *.md)     pandoc -s "$INPUTFILE" -o "${INPUTFILE%%.*}.pdf" ;;
     *.rmd)    Rscript -e "rmarkdown::render('$INPUTFILE', '$2')" ;;
-    config.h) make clean install ;;
+    *.h|*.c) make ;;
 esac
 
