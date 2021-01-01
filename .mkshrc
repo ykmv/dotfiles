@@ -13,7 +13,7 @@ alias vimdiff="nvim -d"
 
 alias q="exit"
 
-alias d2="cd $SDA2"
+alias f="cd $FILES"
 alias p="cd $PROJ"
 alias P="cd $PROG"
 alias g="cd $GAMES"

@@ -4,7 +4,7 @@ delim='・'
 
 disks() {
     df -h \
-        | grep "sda$1" \
+        | grep "sd$1" \
         | awk '{print $4}'
 }
 
@@ -24,6 +24,6 @@ currency() {
 }
 
 while true; do
-   xsetroot -name "Weather:$(forecast) $delim USD: $(currency) $delim upd: $(update) $delim $(memory) $delim sda4: $(disks 4) $delim sda3: $(disks 3) $delim $(date)"
+   xsetroot -name "Weather:$(forecast) $delim USD: $(currency) $delim $(memory) $delim OS: $(disks a1) $delim files: $(disks b1) $delim $(date)"
     sleep 4
 done
