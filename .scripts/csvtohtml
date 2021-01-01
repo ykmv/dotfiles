@@ -1,3 +1,4 @@
+#!/bin/sh
 echo "<table>"
 sed 's/,*$//g;  
      s/,/<\/td>\n\t\t<td>/g; 
