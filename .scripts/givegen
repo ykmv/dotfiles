@@ -1,0 +1,312 @@
+#!/bin/sh
+# Generates give command and prints it to stdout
+
+ITEM_ID=wooden_sword
+ITEM_NAME=
+COUNT=
+TARGET=@p
+
+UNBREAKABLE=1
+
+MAX_HEALTH=
+FOLLOW_RANGE=
+KNOCKBACK_RESISTANCE=
+MOVEMENT_SPEED=
+ATTACK_DAMAGE=
+ARMOR=
+ARMOR_TOUGHNESS=
+ATTACK_KNOCKBACK=
+ATTACK_SPEED=
+LUCK=
+JUMP_STRENGTH=
+FLYING_SPEED=
+SPAWN_REINFORCEMENTS=
+
+MAX_HEALTH_OP=0
+FOLLOW_RANGE_OP=0
+KNOCKBACK_RESISTANCE_OP=0
+MOVEMENT_SPEED_OP=0
+ATTACK_DAMAGE_OP=0
+ARMOR_OP=0
+ARMOR_TOUGHNESS_OP=0
+ATTACK_KNOCKBACK_OP=0
+ATTACK_SPEED_OP=0
+LUCK_OP=0
+JUMP_STRENGTH_OP=0
+FLYING_SPEED_OP=0
+SPAWN_REINFORCEMENTS_OP=0
+
+
+AQUA_AFFINITY=
+BANE_OF_ARTHROPODS=
+BINDING_CURSE=
+BLAST_PROTECTION=
+CHANNELING=
+DEPTH_STRIDER=
+EFFICIENCY=
+FEATHER_FALLING=
+FIRE_ASPECT=
+FIRE_PROTECTION=
+FLAME=
+FORTUNE=
+FROST_WALKER=
+IMPALING=
+INFINITY=
+KNOCKBACK=
+LOOTING=
+LOYALTY=
+LUCK_OF_THE_SEA=
+LURE=
+MENDING=
+MULTISHOT=
+PIERCING=
+POWER=
+PROJECTILE_PROTECTION=
+PROTECTION=
+PUNCH=
+QUICK_CHARGE=
+RESPIRATION=
+RIPTIDE=
+SHARPNESS=
+SILK_TOUCH=
+SMITE=
+SOUL_SPEED=
+SWEEPING=
+THORNS=
+UNBREAKING=
+VANISHING_CURSE=
+
+
+# ---- CODE ---
+ATTRS="
+generic.max_health
+generic.follow_range
+generic.knockback_resistance
+generic.movement_speed
+generic.attack_damage
+generic.armor
+generic.armor_toughness
+generic.attack_knockback
+generic.attack_speed
+generic.luck
+horse.jump_strength
+generic.flying_speed
+zombie.spawn_reinforcements
+"
+
+ENCHS="
+minecraft:aqua_affinity
+minecraft:bane_of_arthropods
+minecraft:binding_curse
+minecraft:blast_protection
+minecraft:channeling
+minecraft:depth_strider
+minecraft:efficiency
+minecraft:feather_falling
+minecraft:fire_aspect
+minecraft:fire_protection
+minecraft:flame
+minecraft:fortune
+minecraft:frost_walker
+minecraft:impaling
+minecraft:infinity
+minecraft:knockback
+minecraft:looting
+minecraft:loyalty
+minecraft:luck_of_the_sea
+minecraft:lure
+minecraft:mending
+minecraft:multishot
+minecraft:piercing
+minecraft:power
+minecraft:projectile_protection
+minecraft:protection
+minecraft:punch
+minecraft:quick_charge
+minecraft:respiration
+minecraft:riptide
+minecraft:sharpness
+minecraft:silk_touch
+minecraft:smite
+minecraft:soul_speed
+minecraft:sweeping
+minecraft:thorns
+minecraft:unbreaking
+minecraft:vanishing_curse
+"
+
+
+genrand() {
+   awk 'BEGIN {srand(); printf("%d", 4096*rand())}'
+}
+makedisplay() {
+   if [ -n "$ITEM_NAME" ]; then
+      printf "
+display:{
+Name:\"{\\\"text\\\":\\\"%s\\\"}\"
+}" "$ITEM_NAME" | tr '\n' ' '
+   fi
+}
+makeunbreakable() {
+   if [ -n "$UNBREAKABLE" ]; then
+      echo "Unbreakable: 1,"
+   fi
+}
+
+# ATTRIBUTES
+makeattr() {
+   ATTRIBUTENAME="$1"
+   AMOUNT="$2"
+   OPERATION="$3"
+   echo "{
+AttributeName:\"$ATTRIBUTENAME\", 
+Name:\"$ATTRIBUTENAME\", 
+Amount: $AMOUNT, 
+Operation: $OPERATION, 
+UUID:[I; $(genrand), $(genrand), $(genrand), $(genrand)]},
+" | tr '\n' ' '
+}
+makeallattrs() {
+   isnull() {
+      if [ -z "$2" ]; then
+         true;
+      else 
+         makeattr "$(echo "$ATTRS" | grep -i "$1")" "$2" "$3"
+      fi
+   }
+   MAX_HEALTH_ATTR=$(isnull max_health "$MAX_HEALTH" "$MAX_HEALTH_OP")
+   FOLLOW_RANGE_ATTR=$(isnull follow_range "$FOLLOW_RANGE" "$FOLLOW_RANGE_OP")
+   KNOCKBACK_RESISTANCE_ATTR=$(isnull knockback_resistance "$KNOCKBACK_RESISTANCE" "$KNOCKBACK_RESISTANCE_OP")
+   MOVEMENT_SPEED_ATTR=$(isnull movement_speed "$MOVEMENT_SPEED" "$MOVEMENT_SPEED_OP")
+   ATTACK_DAMAGE_ATTR=$(isnull attack_damage "$ATTACK_DAMAGE" "$ATTACK_DAMAGE_OP")
+   ARMOR_ATTR=$(isnull armor "$ARMOR" "$ARMOR_OP")
+   ARMOR_TOUGHNESS_ATTR=$(isnull armor_toughness "$ARMOR_TOUGHNESS" "$ARMOR_TOUGHNESS_OP")
+   ATTACK_KNOCKBACK_ATTR=$(isnull attack_knockback "$ATTACK_KNOCKBACK" "$ATTACK_KNOCKBACK_OP")
+   ATTACK_SPEED_ATTR=$(isnull attack_speed "$ATTACK_SPEED" "$ATTACK_SPEED_OP")
+   LUCK_ATTR=$(isnull luck "$LUCK" "$LUCK_OP")
+   JUMP_STRENGTH_ATTR=$(isnull jump_strength "$JUMP_STRENGTH" "$JUMP_STRENGTH_OP")
+   FLYING_SPEED_ATTR=$(isnull flying_speed "$FLYING_SPEED" "$FLYING_SPEED_OP")
+   SPAWN_REINFORCEMENTS_ATTR=$(isnull spawn_reinforcements "$SPAWN_REINFORCEMENTS" "$SPAWN_REINFORCEMENTS_OP")
+   if [ -n "$MAX_HEALTH_ATTR$FOLLOW_RANGE_ATTR$KNOCKBACK_RESISTANCE_ATTR$MOVEMENT_SPEED_ATTR$ATTACK_DAMAGE_ATTR$ARMOR_ATTR$ARMOR_TOUGHNESS_ATTR$ATTACK_KNOCKBACK_ATTR$ATTACK_SPEED_ATTR$LUCK_ATTR$JUMP_STRENGTH_ATTR$FLYING_SPEED_ATTR$SPAWN_REINFORCEMENTS_ATTR" ];then 
+   echo "AttributeModifiers:[
+$MAX_HEALTH_ATTR
+$FOLLOW_RANGE_ATTR
+$KNOCKBACK_RESISTANCE_ATTR
+$MOVEMENT_SPEED_ATTR
+$ATTACK_DAMAGE_ATTR
+$ARMOR_ATTR
+$ARMOR_TOUGHNESS_ATTR
+$ATTACK_KNOCKBACK_ATTR
+$ATTACK_SPEED_ATTR
+$LUCK_ATTR
+$JUMP_STRENGTH_ATTR
+$FLYING_SPEED_ATTR
+$SPAWN_REINFORCEMENTS_ATTR],
+" | tr '\n' ' '
+   fi
+}
+# ENCHANTMENTS
+makeench() {
+   ENCH_ID="$1"
+   LEVEL="$2"
+   echo "{id:\"$ENCH_ID\",lvl:$LEVEL},"
+   true;
+}
+
+makeallenchs() {
+   isnull() {
+      if [ -z "$2" ]; then
+         true;
+      else 
+         makeench "$(echo "$ENCHS" | grep -i "$1")" "$2"
+      fi
+   }
+AQUA_AFFINITY=$(isnull AQUA_AFFINITY "$AQUA_AFFINITY")
+BANE_OF_ARTHROPODS=$(isnull BANE_OF_ARTHROPODS "$BANE_OF_ARTHROPODS")
+BINDING_CURSE=$(isnull BINDING_CURSE "$BINDING_CURSE")
+BLAST_PROTECTION=$(isnull BLAST_PROTECTION "$BLAST_PROTECTION")
+CHANNELING=$(isnull CHANNELING "$CHANNELING")
+DEPTH_STRIDER=$(isnull DEPTH_STRIDER "$DEPTH_STRIDER")
+EFFICIENCY=$(isnull EFFICIENCY "$EFFICIENCY")
+FEATHER_FALLING=$(isnull FEATHER_FALLING "$FEATHER_FALLING")
+FIRE_ASPECT=$(isnull FIRE_ASPECT "$FIRE_ASPECT")
+FIRE_PROTECTION=$(isnull FIRE_PROTECTION "$FIRE_PROTECTION")
+FLAME=$(isnull FLAME "$FLAME")
+FORTUNE=$(isnull FORTUNE "$FORTUNE")
+FROST_WALKER=$(isnull FROST_WALKER "$FROST_WALKER")
+IMPALING=$(isnull IMPALING "$IMPALING")
+INFINITY=$(isnull INFINITY "$INFINITY")
+KNOCKBACK=$(isnull KNOCKBACK "$KNOCKBACK")
+LOOTING=$(isnull LOOTING "$LOOTING")
+LOYALTY=$(isnull LOYALTY "$LOYALTY")
+LUCK_OF_THE_SEA=$(isnull LUCK_OF_THE_SEA "$LUCK_OF_THE_SEA")
+LURE=$(isnull LURE "$LURE")
+MENDING=$(isnull MENDING "$MENDING")
+MULTISHOT=$(isnull MULTISHOT "$MULTISHOT")
+PIERCING=$(isnull PIERCING "$PIERCING")
+POWER=$(isnull POWER "$POWER")
+PROJECTILE_PROTECTION=$(isnull PROJECTILE_PROTECTION "$PROJECTILE_PROTECTION")
+PROTECTION=$(isnull PROTECTION "$PROTECTION")
+PUNCH=$(isnull PUNCH "$PUNCH")
+QUICK_CHARGE=$(isnull QUICK_CHARGE "$QUICK_CHARGE")
+RESPIRATION=$(isnull RESPIRATION "$RESPIRATION")
+RIPTIDE=$(isnull RIPTIDE "$RIPTIDE")
+SHARPNESS=$(isnull SHARPNESS "$SHARPNESS")
+SILK_TOUCH=$(isnull SILK_TOUCH "$SILK_TOUCH")
+SMITE=$(isnull SMITE "$SMITE")
+SOUL_SPEED=$(isnull SOUL_SPEED "$SOUL_SPEED")
+SWEEPING=$(isnull SWEEPING "$SWEEPING")
+THORNS=$(isnull THORNS "$THORNS")
+UNBREAKING=$(isnull UNBREAKING "$UNBREAKING")
+VANISHING_CURSE=$(isnull VANISHING_CURSE "$VANISHING_CURSE")
+
+if [ -n "$AQUA_AFFINITY$BANE_OF_ARTHROPODS$BINDING_CURSE$BLAST_PROTECTION$CHANNELING$DEPTH_STRIDER$EFFICIENCY$FEATHER_FALLING$FIRE_ASPECT$FIRE_PROTECTION$FLAME$FORTUNE$FROST_WALKER$IMPALING$INFINITY$KNOCKBACK$LOOTING$LOYALTY$LUCK_OF_THE_SEA$LURE$MENDING$MULTISHOT$PIERCING$POWER$PROJECTILE_PROTECTION$PROTECTION$PUNCH$QUICK_CHARGE$RESPIRATION$RIPTIDE$SHARPNESS$SILK_TOUCH$SMITE$SOUL_SPEED$SWEEPING$THORNS$UNBREAKING$VANISHING_CURSE" ]; then
+   echo "Enchantments:[
+$AQUA_AFFINITY
+$BANE_OF_ARTHROPODS
+$BINDING_CURSE
+$BLAST_PROTECTION
+$CHANNELING
+$DEPTH_STRIDER
+$EFFICIENCY
+$FEATHER_FALLING
+$FIRE_ASPECT
+$FIRE_PROTECTION
+$FLAME
+$FORTUNE
+$FROST_WALKER
+$IMPALING
+$INFINITY
+$KNOCKBACK
+$LOOTING
+$LOYALTY
+$LUCK_OF_THE_SEA
+$LURE
+$MENDING
+$MULTISHOT
+$PIERCING
+$POWER
+$PROJECTILE_PROTECTION
+$PROTECTION
+$PUNCH
+$QUICK_CHARGE
+$RESPIRATION
+$RIPTIDE
+$SHARPNESS
+$SILK_TOUCH
+$SMITE
+$SOUL_SPEED
+$SWEEPING
+$THORNS
+$UNBREAKING
+$VANISHING_CURSE],
+" | tr '\n' ' '
+fi
+}
+
+
+makegive() {
+   echo "give $TARGET $ITEM_ID{$(makeunbreakable)$(makedisplay)$(makeallenchs)$(makeallattrs)} $COUNT"
+}
+
+makegive
