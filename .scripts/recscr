@@ -1,0 +1,29 @@
+#!/bin/sh
+OUTPUT=
+VIDEOSIZE=
+RECORDDISPLAY=$DISPLAY.0
+QP=25
+
+while getopts o:s:d:q: name
+do
+   case $name in
+      o) OUTPUT="$OPTARG" ;;
+      s) VIDEOSIZE="$OPTARG" ;;
+      d) DISPLAY="$OPTARG" ;;
+      q) QP="$OPTARG" ;;
+      *) echo "Usage: recscr -o <output> -d <display> -s <screen_size> -q <qp_count>" ;;
+   esac
+done
+
+if [ -z "$OUTPUT" ]; then
+   echo "recscr: No Output" && exit;
+fi
+if [ -z "$VIDEOSIZE" ]; then
+   VIDEOSIZE=$(xwininfo -root | awk '/geometry/ {print $2}' | sed 's/+.+.//g')
+fi
+
+ffmpeg \
+   -f pulse -i 1 \
+   -vaapi_device /dev/dri/renderD128 \
+   -f x11grab -video_size "$VIDEOSIZE" -i "$RECORDDISPLAY" \
+   -vf 'hwupload,scale_vaapi=format=nv12' -c:v h264_vaapi -qp "$QP" "$OUTPUT"

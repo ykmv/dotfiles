@@ -4,5 +4,7 @@ feh --bg-fill $IMAGES/whitebg.png &
 screenconf &
 keyconf &
 dunst &
-dwmstatus &
+dwmblocks &
+sxhkd &
+uim-xim &
 dwm

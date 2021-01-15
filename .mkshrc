@@ -1,21 +1,20 @@
 #!/bin/mksh
 # Path and settings and PS1
-export PS1='[34m./${PWD##*/} [32m$(git branch 2>/dev/null | grep \* | sed "s/$/ /" )[0m$ '
+export PS1='./${PWD##*/} $(git branch 2>/dev/null | grep \* | sed "s/$/ /" )$ '
 
 export VIMINIT="source $HOME/.config/vim/vimrc"
 
 # Aliases
 alias vrc="$EDITOR ~/.config/vim/vimrc"
 alias shrc="$EDITOR ~/.mkshrc"
-alias ls="ls --color=auto"
 
 alias vimdiff="nvim -d"
 
 alias q="exit"
 
 alias f="cd $FILES"
-alias p="cd $PROJ"
-alias P="cd $PROG"
+alias p="cd $PROJECTS"
+alias P="cd $PROGRAMS"
 alias g="cd $GAMES"
 alias d="cd $DOCS"
 alias pc98="cd $SDA2/pc98"
@@ -23,29 +22,13 @@ alias i="cd $IMAGES"
 alias S="cd $IMAGES/Screenshots"
 alias r="cd $RECORDS"
 
-alias acme="acme -f $PLAN9/font/fixed/unicode.7x14.font"
-
-alias  cr="cargo run"
-alias  cb="cargo build"
-alias cch="cargo check"
-alias  cn="cargo new"
-alias  ci="cargo install"
-alias  cbloat="cargo bloat"
-alias  ctree="cargo tree" 
-
-alias gr="go run"
-alias gb="go build"
+alias acme="acme -f /home/ykm/plan9port/font/fixed/unicode.7x14.font"
 
 alias gch="git checkout"
 alias gbr="git branch"
 alias gco="git commit"
 
-alias  thc="thcrap"
-alias thcr="thcrapru"
-
 alias jj="java -jar"
-
-nld() {cp $DOCS/latex/template.tex ./$1.tex}
 
 alias xi="doas xbps-install"
 alias xq="doas xbps-query"
@@ -53,7 +36,16 @@ alias xr="doas xbps-remove"
 
 export LANG=en_US.UTF-8
 
-alias kb="$EDITOR /mnt/sda2/knowledge_base/"
+alias clip="xclip -selection clibpoard -i"
+alias prim="xclip -selection primary -i"
+alias primary="prim";
+
+alias t="tree";
+
+nld() {cp $DOCS/latex/template.tex ./$1.tex}
+rcsv() { 
+   Rscript -e "read.csv(file = \"$1\")" 
+}
 
 alias [="busybox ["
 alias arch="busybox arch"
@@ -282,3 +274,4 @@ alias xz="busybox xz"
 alias xzcat="busybox xzcat"
 alias yes="busybox yes"
 alias zcat="busybox zcat"
+export PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/share/pkgconfig

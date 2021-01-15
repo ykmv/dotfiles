@@ -1,4 +1,5 @@
 #!/bin/sh
+# bunch of commands for compiling different documents.
 
 INPUTFILE=$1
 

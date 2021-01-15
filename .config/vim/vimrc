@@ -10,6 +10,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'vim-scripts/AutoComplPop'
 call plug#end()
 
+nnoremap <Space>r :source ~/.config/vim/vimrc<CR>
+
 syntax enable
 set nocompatible
 set tabstop=3
@@ -25,8 +27,8 @@ source ~/.config/vim/ruscmd.vim
 
 set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯЖ;ABCDEFGHIJKLMNOPQRSTUVWXYZ:,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
 
-nmap <Space>i :!compile %<CR>
-nmap <Space>ш :!compile %<CR>
+nmap <Space>i :!compile % &<CR>
+nmap <Space>ш :!compile % &<CR>
 
 nnoremap j gj
 nnoremap k gk
@@ -35,30 +37,7 @@ nnoremap L A
 nmap K <Plug>(expand_region_expand)
 nmap J <Plug>(expand_region_shrink)
 nnoremap <silent> <esc> <esc>:noh<cr>
-
-autocmd FileType tex set timeoutlen=200
-autocmd FileType tex imap <Space><Space> <Esc>/<++><CR>df>i
-autocmd FileType tex nmap <Space><Space> <Esc>/<++><CR>df>i
-
-autocmd FileType tex inoremap ;ol   \begin{itemize}<Enter><Enter>\end{itemize}<Esc>k
-autocmd FileType tex inoremap ;ul   \begin{enumerate}<Enter><Enter>\end{enumerate}<Esc>k
-autocmd FileType tex inoremap ;li   \item <Esc>T{i
-autocmd FileType tex inoremap ;sc   \section{}<Esc>T{i
-autocmd FileType tex inoremap ;ssc  \subsection{}<Esc>T{i
-autocmd FileType tex inoremap ;sssc \subsubsection{}<Esc>T{i
-autocmd FileType tex inoremap ;lab  \label{}<Esc>T{i
-autocmd FileType tex inoremap ;ref  \ref{}<Esc>T{i
-autocmd FileType tex inoremap ;tb   \textbf{}<Esc>T{i
-autocmd FileType tex inoremap ;ti   \textit{}<Esc>T{i
-autocmd FileType tex inoremap ;mt   \maketitle<Esc>T{i
-autocmd FileType tex inoremap ;tab  \begin{tabular}<Enter><Enter>\end{tabular}<Up>
-
-autocmd FileType tex inoremap ;bmd  $$<Enter><Enter>$$<Esc>k
-autocmd FileType tex inoremap ;bmi  $  $<Esc>T{i
-autocmd FileType tex inoremap ;hs   \hspace{}<Esc>T{i
-autocmd FileType tex inoremap ;mf   \frac{}{}<Esc>T{i
-autocmd FileType tex inoremap ;mv   \vec{}<Esc>T{i
-autocmd FileType tex inoremap ;msq  \sqrt{}<Esc>T{i
+nnoremap <Space>a :ALEToggle<CR>
 
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_completion_enabled = 1
@@ -79,3 +58,30 @@ inoremap <F6> set spelllang=ru \
    set spell!
 inoremap <F7> set spelllang=en_us \ 
    set spell!
+
+ab llp <Esc>/<++><Enter>df>i
+ab llul \begin{itemize}<Enter><Enter><Enter><Enter>\end{itemize}<Esc>kki<Tab>\item
+ab llol \begin{numerize}<Enter><Enter><Enter><Enter>\end{numerize}<Esc>kki<Tab>\item
+ab llb \textbf{}<Esc>i
+ab lli \textit{}<Esc>i
+ab llsl \textsl{}<Esc>i
+ab llrm \textrm{}<Esc>i
+ab llsf \textsf{}<Esc>i
+ab lltt \texttt{}<Esc>i
+ab llsc \textsc{}<Esc>i
+ab llnc \newcommand
+ab llmt \maketitle
+ab lldc \documentclass<Esc>i
+ab llup \usepackage<Esc>i
+ab llcenter \begin{center}<Enter><Enter><Enter>\end{center}<Esc>ki
+ab llsec \section{}<Esc>i
+ab llsubsec \subsection{}<Esc>i
+ab llsubsubsec \subsubsection{}<Esc>i
+ab llpar \paragraph
+ab llsubpar \subparagraph
+
+ab htol <ol><Enter><Enter></ol><Esc>ki
+ab htul <ul><Enter><Enter></ul><Esc>ki
+ab htli <li></li><Esc>F<i
+ab htmlp <!DOCTYPE html><Enter><html><Enter><head><Enter><meta charset="utf-8"/><Enter><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/><Enter><title><++></title><Enter><link rel="stylesheet" href="style.css"/><Enter></head><Enter><body><Enter><++><Enter></body><Enter><Esc>d0i</html><Esc>gg/<++><Enter>df>i
+ab htp <p></p><Esc>F<i
