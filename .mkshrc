@@ -4,6 +4,8 @@ export PS1='./${PWD##*/} $(git branch 2>/dev/null | grep \* | sed "s/$/ /" )$ '
 
 export VIMINIT="source $HOME/.config/vim/vimrc"
 
+export TAGDIR="$HOME/.config/tags"
+
 # Aliases
 alias vrc="$EDITOR ~/.config/vim/vimrc"
 alias shrc="$EDITOR ~/.mkshrc"
@@ -46,6 +48,11 @@ nld() {cp $DOCS/latex/template.tex ./$1.tex}
 rcsv() { 
    Rscript -e "read.csv(file = \"$1\")" 
 }
+
+alias cfg-vim="$EDITOR ~/.config/vim/vimrc"
+alias cfg-awesome="$EDITOR ~/.config/awesome/rc.lua"
+alias cfg-awesome-theme="$EDITOR ~/.config/awesome/theme.lua"
+
 
 alias [="busybox ["
 alias arch="busybox arch"
@@ -247,7 +254,6 @@ alias touch="busybox touch"
 alias tr="busybox tr"
 alias true="busybox true"
 alias truncate="busybox truncate"
-alias ts="busybox ts"
 alias tty="busybox tty"
 alias udhcpc="busybox udhcpc"
 alias uevent="busybox uevent"
@@ -274,4 +280,3 @@ alias xz="busybox xz"
 alias xzcat="busybox xzcat"
 alias yes="busybox yes"
 alias zcat="busybox zcat"
-export PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/share/pkgconfig

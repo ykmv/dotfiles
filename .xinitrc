@@ -7,4 +7,4 @@ dunst &
 dwmblocks &
 sxhkd &
 uim-xim &
-dwm
+awesome

@@ -1,0 +1,48 @@
+#!/bin/sh
+if [ -z "$TAGDIR" ]; then
+   echo "TAGDIR is undefined" && exit 1;
+fi
+
+tagls() {
+   find "$TAGDIR" -type f | sed "s/.*\///g; s/\.tag//g"
+}  
+
+tagrm() {
+   TAG="$1"
+   ITEM="$2"
+
+   LINE=$(grep -n "$ITEM" "$TAGDIR/$TAG".tag | awk -F: '{print $1}')
+
+   for l in $LINE; do
+      sed -i "${l}d" "$TAGDIR"/"$TAG".tag
+   done
+
+   if [ -z "$(cat "$TAGDIR/$TAG.tag")" ]; then
+      rm "$TAGDIR/$TAG.tag";
+   fi
+}
+
+tagadd() {
+   TAG="$1"
+   ITEM="$2"
+
+   echo "$ITEM" >> "$TAGDIR"/"$TAG".tag
+}
+
+tagshow() {
+   TAG=$1
+
+   if [ -e "$TAGDIR"/"$TAG" ]; then
+      echo "tag: $TAG does not exists" && exit 1;
+   else 
+      cat "$TAGDIR"/"$TAG".tag
+   fi;
+}
+
+case "$1" in
+     ls) tagls "$2" ;;
+     rm) tagrm "$2" "$3" ;;
+    add) tagadd "$2" "$3" ;;
+   show) tagshow "$2" ;;
+      *) echo "tag: Unknown command" && exit 1 ;;
+esac

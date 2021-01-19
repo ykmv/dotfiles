@@ -10,3 +10,5 @@ ln -s ~/dotfiles/.config/picom ~/.config/picom
 ln -s ~/dotfiles/.config/vim ~/.config/vim
 ln -s ~/dotfiles/.config/newsboat ~/.config/newsboat
 ln -s ~/dotfiles/.config/openbox ~/.config/openbox
+ln -s ~/dotfiles/.config/alacritty ~/.config/alacritty
+ln -s ~/dotfiles/.config/awesome ~/.config/awesome
