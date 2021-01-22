@@ -1,84 +1,16 @@
 #!/bin/sh
 # Generates /give command for Minecraft and prints it to stdout
 
-# TODO: Make script to get parameters from command line instead of configuring everything in the script itself. :/
-ITEM_ID=wooden_sword
+USED_ATTRS=
+USED_ENCHS=
+
+ITEM_ID=
 ITEM_NAME=
 COUNT=
-TARGET=@p
+TARGET=
 
-UNBREAKABLE=1
+UNBREAKABLE=
 
-MAX_HEALTH=
-FOLLOW_RANGE=
-KNOCKBACK_RESISTANCE=
-MOVEMENT_SPEED=
-ATTACK_DAMAGE=
-ARMOR=
-ARMOR_TOUGHNESS=
-ATTACK_KNOCKBACK=
-ATTACK_SPEED=
-LUCK=
-JUMP_STRENGTH=
-FLYING_SPEED=
-SPAWN_REINFORCEMENTS=
-
-MAX_HEALTH_OP=0
-FOLLOW_RANGE_OP=0
-KNOCKBACK_RESISTANCE_OP=0
-MOVEMENT_SPEED_OP=0
-ATTACK_DAMAGE_OP=0
-ARMOR_OP=0
-ARMOR_TOUGHNESS_OP=0
-ATTACK_KNOCKBACK_OP=0
-ATTACK_SPEED_OP=0
-LUCK_OP=0
-JUMP_STRENGTH_OP=0
-FLYING_SPEED_OP=0
-SPAWN_REINFORCEMENTS_OP=0
-
-
-AQUA_AFFINITY=
-BANE_OF_ARTHROPODS=
-BINDING_CURSE=
-BLAST_PROTECTION=
-CHANNELING=
-DEPTH_STRIDER=
-EFFICIENCY=
-FEATHER_FALLING=
-FIRE_ASPECT=
-FIRE_PROTECTION=
-FLAME=
-FORTUNE=
-FROST_WALKER=
-IMPALING=
-INFINITY=
-KNOCKBACK=
-LOOTING=
-LOYALTY=
-LUCK_OF_THE_SEA=
-LURE=
-MENDING=
-MULTISHOT=
-PIERCING=
-POWER=
-PROJECTILE_PROTECTION=
-PROTECTION=
-PUNCH=
-QUICK_CHARGE=
-RESPIRATION=
-RIPTIDE=
-SHARPNESS=
-SILK_TOUCH=
-SMITE=
-SOUL_SPEED=
-SWEEPING=
-THORNS=
-UNBREAKING=
-VANISHING_CURSE=
-
-
-# ---- CODE ---
 ATTRS="
 generic.max_health
 generic.follow_range
@@ -136,16 +68,22 @@ minecraft:unbreaking
 minecraft:vanishing_curse
 "
 
+echoerr() {
+   printf "mkgive: %s\n" "$*" >&2
+}
 
 genrand() {
-   awk 'BEGIN {srand(); printf("%d", 4096*rand())}'
+   echo "4" # chosen by fair dice roll.
+            # guaranteed to be random.
 }
+
+# TODO: change syntax to like similar to other funcs.
 makedisplay() {
    if [ -n "$ITEM_NAME" ]; then
       printf "
 display:{
 Name:\"{\\\"text\\\":\\\"%s\\\"}\"
-}" "$ITEM_NAME" | tr '\n' ' '
+}," "$ITEM_NAME" | tr '\n' ' '
    fi
 }
 makeunbreakable() {
@@ -155,161 +93,122 @@ makeunbreakable() {
 }
 
 # ATTRIBUTES
+# TODO: Add error checking.
 makeattr() {
-   ATTRIBUTENAME="$1"
-   AMOUNT="$2"
-   OPERATION="$3"
-   echo "{
-AttributeName:\"$ATTRIBUTENAME\", 
-Name:\"$ATTRIBUTENAME\", 
-Amount: $AMOUNT, 
-Operation: $OPERATION, 
-UUID:[I; $(genrand), $(genrand), $(genrand), $(genrand)]},
-" | tr '\n' ' '
-}
-makeallattrs() {
-   isnull() {
-      if [ -z "$2" ]; then
-         true;
-      else 
-         makeattr "$(echo "$ATTRS" | grep -i "$1")" "$2" "$3"
-      fi
-   }
-   MAX_HEALTH_ATTR=$(isnull max_health "$MAX_HEALTH" "$MAX_HEALTH_OP")
-   FOLLOW_RANGE_ATTR=$(isnull follow_range "$FOLLOW_RANGE" "$FOLLOW_RANGE_OP")
-   KNOCKBACK_RESISTANCE_ATTR=$(isnull knockback_resistance "$KNOCKBACK_RESISTANCE" "$KNOCKBACK_RESISTANCE_OP")
-   MOVEMENT_SPEED_ATTR=$(isnull movement_speed "$MOVEMENT_SPEED" "$MOVEMENT_SPEED_OP")
-   ATTACK_DAMAGE_ATTR=$(isnull attack_damage "$ATTACK_DAMAGE" "$ATTACK_DAMAGE_OP")
-   ARMOR_ATTR=$(isnull armor "$ARMOR" "$ARMOR_OP")
-   ARMOR_TOUGHNESS_ATTR=$(isnull armor_toughness "$ARMOR_TOUGHNESS" "$ARMOR_TOUGHNESS_OP")
-   ATTACK_KNOCKBACK_ATTR=$(isnull attack_knockback "$ATTACK_KNOCKBACK" "$ATTACK_KNOCKBACK_OP")
-   ATTACK_SPEED_ATTR=$(isnull attack_speed "$ATTACK_SPEED" "$ATTACK_SPEED_OP")
-   LUCK_ATTR=$(isnull luck "$LUCK" "$LUCK_OP")
-   JUMP_STRENGTH_ATTR=$(isnull jump_strength "$JUMP_STRENGTH" "$JUMP_STRENGTH_OP")
-   FLYING_SPEED_ATTR=$(isnull flying_speed "$FLYING_SPEED" "$FLYING_SPEED_OP")
-   SPAWN_REINFORCEMENTS_ATTR=$(isnull spawn_reinforcements "$SPAWN_REINFORCEMENTS" "$SPAWN_REINFORCEMENTS_OP")
-   # TODO: Instead of having line with 265 chars check if all enchantments are null in makegive() func.
-   if [ -n "$MAX_HEALTH_ATTR$FOLLOW_RANGE_ATTR$KNOCKBACK_RESISTANCE_ATTR$MOVEMENT_SPEED_ATTR$ATTACK_DAMAGE_ATTR$ARMOR_ATTR$ARMOR_TOUGHNESS_ATTR$ATTACK_KNOCKBACK_ATTR$ATTACK_SPEED_ATTR$LUCK_ATTR$JUMP_STRENGTH_ATTR$FLYING_SPEED_ATTR$SPAWN_REINFORCEMENTS_ATTR" ];then 
-   echo "AttributeModifiers:[
-$MAX_HEALTH_ATTR
-$FOLLOW_RANGE_ATTR
-$KNOCKBACK_RESISTANCE_ATTR
-$MOVEMENT_SPEED_ATTR
-$ATTACK_DAMAGE_ATTR
-$ARMOR_ATTR
-$ARMOR_TOUGHNESS_ATTR
-$ATTACK_KNOCKBACK_ATTR
-$ATTACK_SPEED_ATTR
-$LUCK_ATTR
-$JUMP_STRENGTH_ATTR
-$FLYING_SPEED_ATTR
-$SPAWN_REINFORCEMENTS_ATTR],
-" | tr '\n' ' '
+   if [ -n "$*" ]; then
+      NAME="$(echo "$ATTRS" | grep -i "$(echo "$*" | awk -F, '{print $1}')")"
+      AMOUNT="$(echo "$*" | awk -F, '{print $2}')" 
+      OPERATION="$(echo "$*" | awk -F, '{print $3}')" 
+
+      test -z "$" && echo "VAR is empty";
+
+      printf "{"
+         printf "AttributeName:\"%s\", " "$NAME"
+         printf "Name:\"%s\", " "$NAME"
+         printf "Amount: %s, " "$AMOUNT"
+         printf "Operation: %s, " "$OPERATION"
+         printf "UUID:[I; %s, %s, %s, %s]" "$(genrand)" "$(genrand)" "$(genrand)" "$(genrand)"     
+      printf "},"
    fi
 }
+
+makeattrs() {
+   if [ -n "$USED_ATTRS" ]; then
+      printf 'AttributeModifiers: ['
+      for f in $USED_ATTRS; do
+         makeattr "$f"
+      done 
+      printf '],'
+   fi
+}
+
 # ENCHANTMENTS
+# TODO: Add error checking.
 makeench() {
-   ENCH_ID="$1"
-   LEVEL="$2"
-   echo "{id:\"$ENCH_ID\",lvl:$LEVEL},"
-   true;
+   if [ -n "$*" ]; then
+      ENCH_ID="$(echo "$ENCHS" | grep "$(echo "$@" | awk -F, '{print $1}')")"
+      LEVEL="$(echo "$*" | awk -F, '{print $2}')" 
+
+      printf "{id:\"%s\",lvl:%s}, " "$ENCH_ID" "$LEVEL"
+   fi
 }
 
-makeallenchs() {
-   isnull() {
-      if [ -z "$2" ]; then
-         true;
-      else 
-         makeench "$(echo "$ENCHS" | grep -i "$1")" "$2"
-      fi
+makeenchs() {
+   if [ -n "$USED_ENCHS" ]; then
+      printf 'Enchantments: ['
+      for f in $USED_ENCHS; do
+         makeench "$f"
+      done 
+      printf '],'
+   fi
+}
+
+# HELP 
+help() {
+   h() {
+      echo "mkgive - generates /give command for Minecraft and prints it to stdout."
    }
-AQUA_AFFINITY=$(isnull AQUA_AFFINITY "$AQUA_AFFINITY")
-BANE_OF_ARTHROPODS=$(isnull BANE_OF_ARTHROPODS "$BANE_OF_ARTHROPODS")
-BINDING_CURSE=$(isnull BINDING_CURSE "$BINDING_CURSE")
-BLAST_PROTECTION=$(isnull BLAST_PROTECTION "$BLAST_PROTECTION")
-CHANNELING=$(isnull CHANNELING "$CHANNELING")
-DEPTH_STRIDER=$(isnull DEPTH_STRIDER "$DEPTH_STRIDER")
-EFFICIENCY=$(isnull EFFICIENCY "$EFFICIENCY")
-FEATHER_FALLING=$(isnull FEATHER_FALLING "$FEATHER_FALLING")
-FIRE_ASPECT=$(isnull FIRE_ASPECT "$FIRE_ASPECT")
-FIRE_PROTECTION=$(isnull FIRE_PROTECTION "$FIRE_PROTECTION")
-FLAME=$(isnull FLAME "$FLAME")
-FORTUNE=$(isnull FORTUNE "$FORTUNE")
-FROST_WALKER=$(isnull FROST_WALKER "$FROST_WALKER")
-IMPALING=$(isnull IMPALING "$IMPALING")
-INFINITY=$(isnull INFINITY "$INFINITY")
-KNOCKBACK=$(isnull KNOCKBACK "$KNOCKBACK")
-LOOTING=$(isnull LOOTING "$LOOTING")
-LOYALTY=$(isnull LOYALTY "$LOYALTY")
-LUCK_OF_THE_SEA=$(isnull LUCK_OF_THE_SEA "$LUCK_OF_THE_SEA")
-LURE=$(isnull LURE "$LURE")
-MENDING=$(isnull MENDING "$MENDING")
-MULTISHOT=$(isnull MULTISHOT "$MULTISHOT")
-PIERCING=$(isnull PIERCING "$PIERCING")
-POWER=$(isnull POWER "$POWER")
-PROJECTILE_PROTECTION=$(isnull PROJECTILE_PROTECTION "$PROJECTILE_PROTECTION")
-PROTECTION=$(isnull PROTECTION "$PROTECTION")
-PUNCH=$(isnull PUNCH "$PUNCH")
-QUICK_CHARGE=$(isnull QUICK_CHARGE "$QUICK_CHARGE")
-RESPIRATION=$(isnull RESPIRATION "$RESPIRATION")
-RIPTIDE=$(isnull RIPTIDE "$RIPTIDE")
-SHARPNESS=$(isnull SHARPNESS "$SHARPNESS")
-SILK_TOUCH=$(isnull SILK_TOUCH "$SILK_TOUCH")
-SMITE=$(isnull SMITE "$SMITE")
-SOUL_SPEED=$(isnull SOUL_SPEED "$SOUL_SPEED")
-SWEEPING=$(isnull SWEEPING "$SWEEPING")
-THORNS=$(isnull THORNS "$THORNS")
-UNBREAKING=$(isnull UNBREAKING "$UNBREAKING")
-VANISHING_CURSE=$(isnull VANISHING_CURSE "$VANISHING_CURSE")
-
-# TODO: Instead of having line with ~440 chars check if all enchantments are null in makegive() func.
-if [ -n "$AQUA_AFFINITY$BANE_OF_ARTHROPODS$BINDING_CURSE$BLAST_PROTECTION$CHANNELING$DEPTH_STRIDER$EFFICIENCY$FEATHER_FALLING$FIRE_ASPECT$FIRE_PROTECTION$FLAME$FORTUNE$FROST_WALKER$IMPALING$INFINITY$KNOCKBACK$LOOTING$LOYALTY$LUCK_OF_THE_SEA$LURE$MENDING$MULTISHOT$PIERCING$POWER$PROJECTILE_PROTECTION$PROTECTION$PUNCH$QUICK_CHARGE$RESPIRATION$RIPTIDE$SHARPNESS$SILK_TOUCH$SMITE$SOUL_SPEED$SWEEPING$THORNS$UNBREAKING$VANISHING_CURSE" ]; then
-   echo "Enchantments:[
-$AQUA_AFFINITY
-$BANE_OF_ARTHROPODS
-$BINDING_CURSE
-$BLAST_PROTECTION
-$CHANNELING
-$DEPTH_STRIDER
-$EFFICIENCY
-$FEATHER_FALLING
-$FIRE_ASPECT
-$FIRE_PROTECTION
-$FLAME
-$FORTUNE
-$FROST_WALKER
-$IMPALING
-$INFINITY
-$KNOCKBACK
-$LOOTING
-$LOYALTY
-$LUCK_OF_THE_SEA
-$LURE
-$MENDING
-$MULTISHOT
-$PIERCING
-$POWER
-$PROJECTILE_PROTECTION
-$PROTECTION
-$PUNCH
-$QUICK_CHARGE
-$RESPIRATION
-$RIPTIDE
-$SHARPNESS
-$SILK_TOUCH
-$SMITE
-$SOUL_SPEED
-$SWEEPING
-$THORNS
-$UNBREAKING
-$VANISHING_CURSE],
-" | tr '\n' ' '
-fi
+   c() {
+      OPT_NAME="$1"
+      OPT_ARGS="$2"
+      OPT_DESC="$3"
+      printf "   %s - %s.\n" "$OPT_NAME [$OPT_ARGS]" "$OPT_DESC"
+   }
+   args() {
+      c "-i" "<item_id>" "item ID"
+      c "-t" "<target>" "specify target"
+      c "-a" "<attribute_name>,<amount>,<operation>" "attribute modifier"
+      c "-e" "<enchantment>,<level>" "enchantment"
+      c "-u" "" "unbreakable"
+      c "-d" "<display_name>" "display name. Lore is not implemented yet"
+      c "-c" "<count>" "count"
+   }
+   h
+   echo "Available arguments: "
+   args
+   echo "Note that \`-i' and \`-t' are necessary."
 }
 
-
-makegive() {
-   echo "give $TARGET $ITEM_ID{$(makeunbreakable)$(makedisplay)$(makeallenchs)$(makeallattrs)} $COUNT"
+# MAIN
+mkgive() {
+   CMD_UNBREAKABLE="$(makeunbreakable)"
+   CMD_DISPLAY="$(makedisplay)"
+   CMD_ENCHS="$(makeenchs)"
+   CMD_ATTRS="$(makeattrs)"
+   test -z "$TARGET" && echoerr "no target is specified, use \`-t <target>\`"  && exit 1
+   test -z "$ITEM_ID" && echoerr "no item ID is specified, use \`-i <item_id>\`"  && exit 1
+   printf "give %s %s" "$TARGET" "$ITEM_ID"
+   test -n "$CMD_UNBREAKABLE$CMD_DISPLAY$CMD_ENCHS$CMD_ATTRS" && (
+      printf "{";
+      test -n "$CMD_UNBREAKABLE" && printf "%s" "$CMD_UNBREAKABLE";
+      test -n "$CMD_DISPLAY"     && printf "%s" "$CMD_DISPLAY";
+      test -n "$CMD_ENCHS"       && printf "%s" "$CMD_ENCHS";
+      test -n "$CMD_ATTRS"       && printf "%s" "$CMD_ATTRS";
+      printf "}";
+   ) # Is it really necessary to use subshell?
+   test -z "$COUNT" || printf " %s\n" "$COUNT"
 }
 
-makegive
+main() {
+   while getopts hc:ud:t:i:a:e: opt
+   do
+      case $opt in 
+         h) help && exit 0;;
+         u) UNBREAKABLE=1 ;;
+         i) ITEM_ID="$OPTARG" ;;
+         t) TARGET="$OPTARG"  ;;
+         c) COUNT="$OPTARG" ;;
+         d) ITEM_NAME="$OPTARG" ;;
+         a)
+            ATTR="$OPTARG";
+            USED_ATTRS="$USED_ATTRS $ATTR" ;;
+         e) 
+            ENCH="$OPTARG";
+            USED_ENCHS="$USED_ENCHS $ENCH" ;;
+         *) echo "Unknown command"; exit 1 ;;
+      esac
+   done
+   mkgive
+}
+
+main "$@"
