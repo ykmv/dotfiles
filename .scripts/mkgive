@@ -163,10 +163,15 @@ help() {
       c "-d" "<display_name>" "display name. Lore is not implemented yet"
       c "-c" "<count>" "count"
    }
+   e() {
+      echo "Example: "
+      echo "   mkgive -i wooden_sword -t @p -a max_health,1,1 -e fortune,1";
+   }
    h
    echo "Available arguments: "
    args
    echo " \`-i' and \`-t' are necessary."
+   e
 }
 
 # MAIN
