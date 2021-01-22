@@ -185,13 +185,14 @@ mkgive() {
    printf "give %s %s" "$TARGET" "$ITEM_ID"
    test -n "$CMD_UNBREAKABLE$CMD_DISPLAY$CMD_ENCHS$CMD_ATTRS" && (
       printf "{";
-      test -n "$CMD_UNBREAKABLE" && printf "%s" "$CMD_UNBREAKABLE";
-      test -n "$CMD_DISPLAY"     && printf "%s" "$CMD_DISPLAY";
-      test -n "$CMD_ENCHS"       && printf "%s" "$CMD_ENCHS";
+      test -n "$CMD_UNBREAKABLE" && printf "%s " "$CMD_UNBREAKABLE";
+      test -n "$CMD_DISPLAY"     && printf "%s " "$CMD_DISPLAY";
+      test -n "$CMD_ENCHS"       && printf "%s " "$CMD_ENCHS";
       test -n "$CMD_ATTRS"       && printf "%s" "$CMD_ATTRS";
       printf "}";
    ) # Is it really necessary to use subshell?
    test -z "$COUNT" || printf " %s\n" "$COUNT"
+   printf "\n"
 }
 
 main() {
