@@ -129,6 +129,9 @@ makeench() {
       ENCH_ID="$(echo "$ENCHS" | grep "$(echo "$@" | awk -F, '{print $1}')")"
       LEVEL="$(echo "$*" | awk -F, '{print $2}')" 
 
+      test -z "$ENCH_ID" && echoerr "enchantment ID is empty" && exit 1;
+      test -z "$LEVEL" && echoerr "$ENCH_ID: level is empty" && exit 1;
+
       printf "{id:\"%s\",lvl:%s}, " "$ENCH_ID" "$LEVEL"
    fi
 }
@@ -166,7 +169,7 @@ help() {
    h
    echo "Available arguments: "
    args
-   echo "Note that \`-i' and \`-t' are necessary."
+   echo " \`-i' and \`-t' are necessary."
 }
 
 # MAIN
