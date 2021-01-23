@@ -1,11 +1,13 @@
 #!/bin/sh
 # Generates /give command for Minecraft and prints it to stdout
+# DON'T USE IT!!!
 
 USED_ATTRS=
 USED_ENCHS=
 
 ITEM_ID=
 ITEM_NAME=
+LORE=
 COUNT=
 TARGET=
 
@@ -78,8 +80,11 @@ genrand() {
 }
 
 makedisplay() {
-   if [ -n "$ITEM_NAME" ]; then
-      printf "display:{Name:\"{\\\"text\\\":\\\"%s\\\"}\"}," "$ITEM_NAME"
+   if [ -n "$ITEM_NAME$LORE" ]; then
+      printf "display:{"
+      test -n "$ITEM_NAME" && printf "Name:\"{\\\"text\\\":\\\"%s\\\"}\", " "$ITEM_NAME"
+      test -n "$LORE" && printf "Lore: [\"\\\"%s\\\"\"]," "$LORE" 
+      printf "}," 
    fi
 }
 makeunbreakable() {
@@ -160,7 +165,8 @@ help() {
       c "-a" "<attribute_name>,<amount>,<operation>" "attribute modifier"
       c "-e" "<enchantment>,<level>" "enchantment"
       c "-u" "" "unbreakable"
-      c "-d" "<display_name>" "display name. Lore is not implemented yet"
+      c "-d" "<display_name>" "display name"
+      c "-l" "<lore>" "lore, a description for an item"
       c "-c" "<count>" "count"
    }
    e() {
@@ -170,7 +176,7 @@ help() {
    h
    echo "Available arguments: "
    args
-   echo " \`-i' and \`-t' are necessary."
+   echo "Note: '-i' and '-t' are necessary."
    e
 }
 
@@ -183,20 +189,20 @@ mkgive() {
    test -z "$TARGET" && echoerr "no target is specified, use \`-t <target>\`"  && exit 1
    test -z "$ITEM_ID" && echoerr "no item ID is specified, use \`-i <item_id>\`"  && exit 1
    printf "give %s %s" "$TARGET" "$ITEM_ID"
-   test -n "$CMD_UNBREAKABLE$CMD_DISPLAY$CMD_ENCHS$CMD_ATTRS" && (
+   if [ -n "$CMD_UNBREAKABLE$CMD_DISPLAY$CMD_ENCHS$CMD_ATTRS" ]; then
       printf "{";
       test -n "$CMD_UNBREAKABLE" && printf "%s " "$CMD_UNBREAKABLE";
       test -n "$CMD_DISPLAY"     && printf "%s " "$CMD_DISPLAY";
       test -n "$CMD_ENCHS"       && printf "%s " "$CMD_ENCHS";
       test -n "$CMD_ATTRS"       && printf "%s" "$CMD_ATTRS";
       printf "}";
-   ) # Is it really necessary to use subshell?
+   fi
    test -z "$COUNT" || printf " %s\n" "$COUNT"
    printf "\n"
 }
 
 main() {
-   while getopts hc:ud:t:i:a:e: opt
+   while getopts hc:ud:t:i:a:e:l: opt
    do
       case $opt in 
          h) help && exit 0;;
@@ -205,6 +211,7 @@ main() {
          t) TARGET="$OPTARG"  ;;
          c) COUNT="$OPTARG" ;;
          d) ITEM_NAME="$OPTARG" ;;
+         l) LORE="$OPTARG" ;;
          a)
             ATTR="$OPTARG";
             USED_ATTRS="$USED_ATTRS $ATTR" ;;
