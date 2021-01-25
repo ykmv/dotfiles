@@ -10,4 +10,3 @@ case $INPUTFILE in
     *.rmd)    Rscript -e "rmarkdown::render('$INPUTFILE', '$2')" ;;
     *.h|*.c) make ;;
 esac
-

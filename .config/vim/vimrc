@@ -12,12 +12,16 @@ call plug#end()
 
 nnoremap <Space>r :source ~/.config/vim/vimrc<CR>
 
+set cul
+hi CursorLine   cterm=NONE ctermbg=black  ctermfg=NONE
+
 syntax enable
 set nocompatible
 set tabstop=3
 set shiftwidth=3
 set expandtab     
 set smarttab      
+set title
 
 set keymap=russian-jcukenwin
 set iminsert=0

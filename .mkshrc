@@ -7,9 +7,6 @@ export VIMINIT="source $HOME/.config/vim/vimrc"
 export TAGDIR="$HOME/.config/tags"
 
 # Aliases
-alias vrc="$EDITOR ~/.config/vim/vimrc"
-alias shrc="$EDITOR ~/.mkshrc"
-
 alias vimdiff="nvim -d"
 
 alias q="exit"
@@ -51,7 +48,9 @@ rcsv() {
 
 alias cfg-vim="$EDITOR ~/.config/vim/vimrc"
 alias cfg-awesome="$EDITOR ~/.config/awesome/rc.lua"
-alias cfg-awesome-theme="$EDITOR ~/.config/awesome/theme.lua"
+alias cfg-awesome-theme="$EDITOR ~/.config/awesome/theme/theme.lua"
+alias cfg-alacritty="$EDITOR ~/.config/alacritty/alacritty.yml"
+alias cfg-mksh="$EDITOR ~/.mkshrc"
 
 
 alias [="busybox ["

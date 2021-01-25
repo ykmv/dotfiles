@@ -1,7 +1,9 @@
+dynamic: true
+dynamic_title: true
 font:
   size: 10
   normal:
-    family: "Liberation Mono"
+    family: "Terminus"
   
 colors:
   primary:
