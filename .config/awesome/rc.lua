@@ -59,9 +59,15 @@ rssreader_cmd = terminal .. " -e " .. rssreader;
 browser = os.getenv("BROWSER");
 
 music = "cmus";
-music_cmd = 
-   terminal .. " -e " .."tmux new -s MUSIC ".. music .. 
-   " || " .. terminal .. " -e " .. "tmux attach -t MUSIC";
+music_cmd =  terminal .. " -e " .. "music.sh"
+
+player_pause = "cmus-remote -C player-pause"
+player_stop = "cmus-remote -C player-stop"
+player_next = "cmus-remote -C player-next"
+player_prev = "cmus-remote -C player-prev"
+vol_plus = "cmus-remote -C vol +5%"
+vol_minus = "cmus-remote -C vol -5%"
+toggle_aaa_mode = "toggleaaa";
 
 mail = "mutt";
 mail_cmd = terminal .. mail;
@@ -105,10 +111,24 @@ myawesomemenu = {
    { "quit", function() awesome.quit() end },
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                           { "open terminal", terminal }
-                          }
-                        })
+musicmenu = {
+   { "Launch cmus", music_cmd },
+   { "Pause/Play", player_pause },
+   { "Stop", player_stop },
+   { "Next Music", player_next },
+   { "Previous Music", player_prev },
+   { "Increase Volume", vol_plus},
+   { "Decrease Volume" , vol_minus},
+   { "Show AAA mode", show_aaa_mode},
+}
+
+mymainmenu = awful.menu(
+   { items = { 
+      { "awesome", myawesomemenu, beautiful.awesome_icon },
+      { "music", musicmenu },
+      { "open terminal", terminal }
+   }
+   })
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                             menu = mymainmenu })
@@ -246,6 +266,8 @@ root.buttons(gears.table.join(
 globalkeys = gears.table.join(
    awful.key({ modkey,         }, "s",     hotkeys_popup.show_help,
      {description="show help", group="awesome"}),
+   awful.key({ modkey, "Shift" }, "m",     hotkeys_popup.show_help,
+     {description="show help", group="awesome"}),
    awful.key({ modkey,         }, "Left",   awful.tag.viewprev,
      {description = "view previous", group = "tag"}),
    awful.key({ modkey,         }, "Right",  awful.tag.viewnext,
@@ -339,7 +361,25 @@ globalkeys = gears.table.join(
            {description = "lua execute prompt", group = "awesome"}),
    -- Menubar
    awful.key({ modkey }, "p", function() menubar.show() end,
-           {description = "show the menubar", group = "launcher"})
+           {description = "show the menubar", group = "launcher"}),
+   
+   -- Music Commands
+   awful.key({ modkey, "Control"}, "m", function () awful.spawn(music_cmd) end,
+      {description = "open cmus", group = "music"}),
+   awful.key({}, "XF86AudioPlay", function () awful.spawn(player_pause) end,
+      {description = "pause/play music", group = "music"}),
+   awful.key({}, "XF86AudioStop", function () awful.spawn(player_stop) end,
+      {description = "stop music", group = "music"}),
+   awful.key({}, "XF86AudioNext", function () awful.spawn(player_next) end,
+      {description = "next music", group = "music"}),
+   awful.key({}, "XF86AudioPrev", function () awful.spawn(player_prev) end,
+      {description = "prev music", group = "music"}),
+   awful.key({}, "XF86AudioRaiseVolume", function () awful.spawn(vol_plus) end,
+      {description = "increase volume", group = "music"}),
+   awful.key({}, "XF86AudioLowerVolume", function () awful.spawn(vol_minus) end,
+      {description = "decrease volume", group = "music"}),
+   awful.key({modkey}, "a", function () awful.spawn(toggle_aaa_mode) end,
+      {description = "Toggle AAA mode", group = "music"})
 )
 
 clientkeys = gears.table.join(
@@ -387,7 +427,56 @@ clientkeys = gears.table.join(
          c.maximized_horizontal = not c.maximized_horizontal
          c:raise()
       end ,
-      {description = "(un)maximize horizontally", group = "client"})
+      {description = "(un)maximize horizontally", group = "client"}),
+
+   awful.key({ modkey, "Shift" }, "t", function (c)
+       -- toggle titlebar
+       if (c:titlebar_top():geometry()['height'] > 0) then
+           awful.titlebar(c, {size = 0})
+       else
+           -- buttons for the titlebar
+           local buttons = awful.util.table.join(
+                   awful.button({ }, 1, function()
+                       client.focus = c
+                       c:raise()
+                       awful.mouse.client.move(c)
+                   end),
+                   awful.button({ }, 3, function()
+                       client.focus = c
+                       c:raise()
+                       awful.mouse.client.resize(c)
+                   end)
+                   )
+    
+           -- Widgets that are aligned to the left
+           local left_layout = wibox.layout.fixed.horizontal()
+           left_layout:add(awful.titlebar.widget.iconwidget(c))
+           left_layout:buttons(buttons)
+    
+           -- Widgets that are aligned to the right
+           local right_layout = wibox.layout.fixed.horizontal()
+           right_layout:add(awful.titlebar.widget.floatingbutton(c))
+           right_layout:add(awful.titlebar.widget.maximizedbutton(c))
+           right_layout:add(awful.titlebar.widget.stickybutton(c))
+           right_layout:add(awful.titlebar.widget.ontopbutton(c))
+           right_layout:add(awful.titlebar.widget.closebutton(c))
+    
+           -- The title goes in the middle
+           local middle_layout = wibox.layout.flex.horizontal()
+           local title = awful.titlebar.widget.titlewidget(c)
+           title:set_align("center")
+           middle_layout:add(title)
+           middle_layout:buttons(buttons)
+    
+           -- Now bring it all together
+           local layout = wibox.layout.align.horizontal()
+           layout:set_left(left_layout)
+           layout:set_right(right_layout)
+           layout:set_middle(middle_layout)
+    
+           awful.titlebar(c):set_widget(layout)
+       end
+   end)
 )
 
 -- Bind all key numbers to tags.
@@ -507,7 +596,15 @@ awful.rules.rules = {
 
    -- Add titlebars to normal clients and dialogs
    { rule_any = {type = { "normal", "dialog" }
-     }, properties = { titlebars_enabled = true }
+     }, properties = { titlebars_enabled = false }
+   },
+
+   { rule = 
+      { class = "th12.exe" }, 
+      properties = { 
+         titlebars_enabled = false, 
+         border_width = 0,  
+      }
    },
 
    -- Set Firefox to always map on the tag named "2" on screen 1.

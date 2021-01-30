@@ -16,3 +16,7 @@ export GAMES="$FILES/games"
 export IMAGES="$FILES/images"
 export PC98="$FILES/pc98"
 export RECORDS="$FILES/records"
+
+if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
+     exec startx
+fi

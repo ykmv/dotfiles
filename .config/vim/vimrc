@@ -13,7 +13,7 @@ call plug#end()
 nnoremap <Space>r :source ~/.config/vim/vimrc<CR>
 
 set cul
-hi CursorLine   cterm=NONE ctermbg=black  ctermfg=NONE
+hi CursorLine   cterm=NONE ctermbg=black ctermfg=NONE
 
 syntax enable
 set nocompatible

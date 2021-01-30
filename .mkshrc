@@ -51,6 +51,7 @@ alias cfg-awesome="$EDITOR ~/.config/awesome/rc.lua"
 alias cfg-awesome-theme="$EDITOR ~/.config/awesome/theme/theme.lua"
 alias cfg-alacritty="$EDITOR ~/.config/alacritty/alacritty.yml"
 alias cfg-mksh="$EDITOR ~/.mkshrc"
+alias cfg-cmus="$EDITOR ~/.config/cmus/rc"
 
 
 alias [="busybox ["
