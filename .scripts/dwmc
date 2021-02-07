@@ -1,8 +1,0 @@
-#!/bin/sh
-# script for sending commands to dwm
-
-signal() {
-   xsetroot -name "fsignal:$*";
-}
-
-signal $*

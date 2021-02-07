@@ -49,7 +49,7 @@ end
 beautiful.init("/home/ykm/.config/awesome/theme/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "alacritty"
+terminal = "xst"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -143,6 +143,9 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
+
+-- Musicstatus watch
+musicstatus = awful.widget.watch("musicstatus", 1)
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -245,6 +248,7 @@ awful.screen.connect_for_each_screen(function(s)
       s.mytasklist, -- Middle widget
       { -- Right widgets
          layout = wibox.layout.fixed.horizontal,
+         musicstatus,
          mykeyboardlayout,
          wibox.widget.systray(),
          mytextclock,
@@ -604,6 +608,13 @@ awful.rules.rules = {
       properties = { 
          titlebars_enabled = false, 
          border_width = 0,  
+      }
+   },
+   { rule = 
+      { class = "xst-256color" }, 
+      properties = { 
+         titlebars_enabled = false,
+         size_hints_honor = false,
       }
    },
 

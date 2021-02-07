@@ -11,6 +11,7 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 
 nnoremap <Space>r :source ~/.config/vim/vimrc<CR>
+nnoremap <esc>^[ <esc>^[
 
 set cul
 hi CursorLine   cterm=NONE ctermbg=black ctermfg=NONE

@@ -1,9 +1,8 @@
-export PLAN9=$HOME/plan9port
 export PATH=$PATH:~/.scripts
-export PATH=$PATH:/mnt/files/programs/inferno/Linux/386/bin
 export PATH=$PATH:$PLAN9/bin
 export GOPATH=/mnt/files/projects/gocode
 export PATH=$PATH:$GOPATH/bin
+#export PATH=~/.local/bin:$PATH
 
 export EDITOR="vim"
 export BROWSER="firefox"
@@ -16,6 +15,8 @@ export GAMES="$FILES/games"
 export IMAGES="$FILES/images"
 export PC98="$FILES/pc98"
 export RECORDS="$FILES/records"
+
+export PKG_CONFIG_PATH="/usr/lib/pkgconfig":"/usr/share/pkgconfig/"
 
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
      exec startx

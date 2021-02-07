@@ -1,16 +1,20 @@
 #!/bin/mksh
-# Path and settings and PS1
-export PS1='./${PWD##*/} $(git branch 2>/dev/null | grep \* | sed "s/$/ /" )$ '
-
+# SETTINGS AND PS1
+# export PS1='[$USER@$(hostname)] ${PWD##*/} $(git branch 2>/dev/null | grep \* | sed "s/$/ /;" )$ '
+export CCRESET="[0m"
+export GREENCC="[32m"
+export BLUECC="[34m"
+export PS1='$BLUECC[$USER@$(hostname)]$GREENCC ${PWD##*/} $CCRESET$(git branch 2>/dev/null | grep \* | sed "s/$/ /;" )$ '
 export VIMINIT="source $HOME/.config/vim/vimrc"
-
 export TAGDIR="$HOME/.config/tags"
+export TERM="xterm-256color"
 
-# Aliases
+export PAGER="/bin/less"
+
 alias vimdiff="nvim -d"
 
+# DIRECTORY ALIASES
 alias q="exit"
-
 alias f="cd $FILES"
 alias p="cd $PROJECTS"
 alias P="cd $PROGRAMS"
@@ -21,6 +25,9 @@ alias i="cd $IMAGES"
 alias S="cd $IMAGES/Screenshots"
 alias r="cd $RECORDS"
 
+# PROGRAM ALIASES
+alias s="startx"
+alias n="nnn"
 alias acme="acme -f /home/ykm/plan9port/font/fixed/unicode.7x14.font"
 
 alias gch="git checkout"
@@ -33,27 +40,31 @@ alias xi="doas xbps-install"
 alias xq="doas xbps-query"
 alias xr="doas xbps-remove"
 
-export LANG=en_US.UTF-8
-
 alias clip="xclip -selection clibpoard -i"
 alias prim="xclip -selection primary -i"
-alias primary="prim";
 
 alias t="tree";
 
+# FUNCTIONS
 nld() {cp $DOCS/latex/template.tex ./$1.tex}
 rcsv() { 
-   Rscript -e "read.csv(file = \"$1\")" 
+   cat "$1" | column -t -s,
 }
 
+# CONFIGURATION ALIASES
 alias cfg-vim="$EDITOR ~/.config/vim/vimrc"
 alias cfg-awesome="$EDITOR ~/.config/awesome/rc.lua"
 alias cfg-awesome-theme="$EDITOR ~/.config/awesome/theme/theme.lua"
 alias cfg-alacritty="$EDITOR ~/.config/alacritty/alacritty.yml"
 alias cfg-mksh="$EDITOR ~/.mkshrc"
 alias cfg-cmus="$EDITOR ~/.config/cmus/rc"
+alias cfg-vifm="$EDITOR ~/.config/vifm/vifmrc"
 
+# NNN CONFIGURATION
+export NNN_PLUG='m:_|mpv $nnn*;t:_|alacritty;'
+export NNN_BMS="f:$FILES;h:$HOME;g:$GAMES;d:$DOCS;p:$PROJECTS;r:$RECORDS;i:$IMAGES;"
 
+# BUSYBOX ALIASES
 alias [="busybox ["
 alias arch="busybox arch"
 alias ash="busybox ash"
