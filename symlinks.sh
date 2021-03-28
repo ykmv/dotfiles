@@ -1,16 +1,15 @@
 #!/bin/sh
-ln -s ~/dotfiles/.Xresources ~/.Xresources
-ln -s ~/dotfiles/.xinitrc ~/.xinitrc
-ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
-ln -s ~/dotfiles/.scripts ~/.scripts
-ln -s ~/dotfiles/.mkshrc ~/.mkshrc
-ln -s ~/dotfiles/.profile ~/.profile
-ln -s ~/dotfiles/.config/dunst ~/.config/dunst
-ln -s ~/dotfiles/.config/lf ~/.config/lf
-ln -s ~/dotfiles/.config/picom ~/.config/picom
-ln -s ~/dotfiles/.config/vim ~/.config/vim
-ln -s ~/dotfiles/.config/newsboat ~/.config/newsboat
-# ln -s ~/dotfiles/.config/alacritty ~/.config/alacritty
-# ln -s ~/dotfiles/.config/awesome ~/.config/awesome
-# ln -s ~/dotfiles/.config/vifm ~/.config/vifm
-ln -s ~/dotfiles/.config/i3 ~/.config/
+mkdir ~/.local/share/
+ln -s ./games ~/.local/share/
+ln -s ./.Xresources ~/.Xresources
+ln -s ./.xinitrc ~/.xinitrc
+ln -s ./.tmux.conf ~/.tmux.conf
+ln -s ./.scripts ~/.scripts
+ln -s ./.mkshrc ~/.mkshrc
+ln -s ./.profile ~/.profile
+ln -s ./.config/dunst ~/.config/dunst
+ln -s ./.config/lf ~/.config/lf
+ln -s ./.config/picom ~/.config/picom
+ln -s ./.config/vim ~/.config/vim
+ln -s ./.config/newsboat ~/.config/newsboat
+ln -s ./.config/i3 ~/.config/
