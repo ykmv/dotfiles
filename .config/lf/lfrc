@@ -1,3 +1,0 @@
-set shell mksh
-map D delete
-map I !zathura $f

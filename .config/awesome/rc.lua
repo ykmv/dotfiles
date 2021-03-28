@@ -65,8 +65,8 @@ player_pause = "cmus-remote -C player-pause"
 player_stop = "cmus-remote -C player-stop"
 player_next = "cmus-remote -C player-next"
 player_prev = "cmus-remote -C player-prev"
-vol_plus = "cmus-remote -C vol +5%"
-vol_minus = "cmus-remote -C vol -5%"
+vol_plus = "cmus-remote -C 'vol +5%'"
+vol_minus = "cmus-remote -C 'vol -5%'"
 toggle_aaa_mode = "toggleaaa";
 
 mail = "mutt";
@@ -78,7 +78,7 @@ mail_cmd = terminal .. mail;
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod1"
+modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -326,7 +326,7 @@ globalkeys = gears.table.join(
      {description = "decrease master width factor", group = "layout"}),
    awful.key({ modkey, "Shift"   }, "h",    function () awful.tag.incnmaster( 1, nil, true) end,
      {description = "increase the number of master clients", group = "layout"}),
-   awful.key({ modkey, "Shift"   }, "l",    function () awful.tag.incnmaster(-1, nil, true) end,
+   awful.key({ modkey, "Shift"  }, "l",    function () awful.tag.incnmaster(-1, nil, true) end,
      {description = "decrease the number of master clients", group = "layout"}),
    awful.key({ modkey, "Control" }, "h",    function () awful.tag.incncol( 1, nil, true)   end,
      {description = "increase the number of columns", group = "layout"}),
@@ -605,6 +605,13 @@ awful.rules.rules = {
 
    { rule = 
       { class = "th12.exe" }, 
+      properties = { 
+         titlebars_enabled = false, 
+         border_width = 0,  
+      }
+   },
+   { rule = 
+      { class = "th15.exe" }, 
       properties = { 
          titlebars_enabled = false, 
          border_width = 0,  

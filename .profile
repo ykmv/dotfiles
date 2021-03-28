@@ -1,9 +1,3 @@
-export PATH=$PATH:~/.scripts
-export PATH=$PATH:$PLAN9/bin
-export GOPATH=/mnt/files/projects/gocode
-export PATH=$PATH:$GOPATH/bin
-#export PATH=~/.local/bin:$PATH
-
 export EDITOR="vim"
 export BROWSER="firefox"
 
@@ -17,7 +11,9 @@ export PC98="$FILES/pc98"
 export RECORDS="$FILES/records"
 
 export PKG_CONFIG_PATH="/usr/lib/pkgconfig":"/usr/share/pkgconfig/"
-
-if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
-     exec startx
-fi
+export PATH=$PATH:~/.scripts
+export PATH=$PATH:$PLAN9/bin
+export GOPATH=/mnt/files/projects/gocode
+export PATH=$PATH:$GOPATH/bin
+export PATH=~/.local/bin:$PATH
+export PATH=$PATH:$PROGRAMS/linuxdiscord/Discord
