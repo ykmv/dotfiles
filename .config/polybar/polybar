@@ -1,0 +1,55 @@
+[bar/mybar]
+font-0 = "Terminus:pixelsize=14"
+bottom = true
+background = #0c0d0e
+foreground = #b7b8b9
+
+tray-position = right
+
+modules-left = bspwm
+modules-center = title
+modules-right = cpu memory pulseaudio date
+
+module-margin = 1.6
+wm-restack = bspwm
+
+[module/date]
+type = internal/date
+interval = 1.0
+
+date = %d-%m-%Y
+time = %H:%M
+
+format = <label>
+label = %date% %time%
+label-muted = MUTED
+
+
+[module/bspwm]
+type = internal/bspwm
+label-focused-background = #b7b8b9
+label-focused-foreground = #0c0d0e
+
+label-occupied-foreground = #e31a1c
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+
+[module/memory]
+type = internal/memory
+interval = 3
+
+label = RAM: %gb_used%/%gb_total%
+
+
+[module/cpu]
+type = internal/cpu
+interval = 1 
+
+label = CPU: %percentage%%
+
+
+[module/title]
+type = internal/xwindow

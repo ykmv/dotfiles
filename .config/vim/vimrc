@@ -25,6 +25,7 @@ set nobackup
 set nowritebackup
 set cmdheight=2
 
+set fileencodings=utf-8,sjis,default
 
 set keymap=russian-jcukenwin
 set iminsert=0
